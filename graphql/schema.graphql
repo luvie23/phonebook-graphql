@@ -10,24 +10,23 @@ type Query {
       "Search by primary key."
       id: ID @eq
 
-    ): User @find
+    ): User @find @guard
 
     "List multiple users."
     users(
       "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
       name: String @where(operator: "like")
-    ): [User!]! @paginate
+    ): [User!]! @paginate @guard
 
     "Get specific contact using name"
     viewContact(
         name: String @eq
-    ): Contact @find
+    ): Contact @find @guard
 
     "List all contacts, can also filter with name"
-    listContacts(
-      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+    listContacts (
       name: String @where(operator: "like")
-    ): [Contact!]! @all 
+    ): [Contact!]! @all  @guard
 }
 
 type Mutation {
@@ -36,7 +35,7 @@ type Mutation {
         name: String!
 
         contact_no: String!
-    ): Contact! @create
+    ): Contact! @create @guard
 
     updateContact(
         id: ID!
@@ -44,16 +43,16 @@ type Mutation {
         name: String
 
         contact_no: String
-    ): Contact! @update
+    ): Contact! @update @guard
 
     deleteContact(
         id: ID! @whereKey
-    ): Contact @delete
+    ): Contact @delete @guard
 
     createUser(
         name: String!
 
-        email: String!
+        email: String! @rules(apply: ["email"])
 
         password: String!
     ): User! @create

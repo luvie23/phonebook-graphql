@@ -1,3 +1,5 @@
 extend type Mutation {
+    "Login to get token"
     login(email: String!, password: String!): String!
 }
+
